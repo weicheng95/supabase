@@ -2073,6 +2073,11 @@ module.exports = [
   },
   {
     permanent: true,
+    source: '/docs/guides/realtime/guides/client-side-throttling',
+    destination: '/docs/guides/realtime/quotas',
+  },
+  {
+    permanent: true,
     source: '/docs/guides/database/extensions/pgcron',
     destination: '/docs/guides/database/extensions/pg_cron',
   },
