@@ -19,7 +19,7 @@ High Swap is generally not a concern if you find other resources on your instanc
 
 Every Supabase project runs in its dedicated virtual machine. Your instance will have a different set of hardware provisioned depending on your [compute add-on](https://supabase.com/docs/guides/platform/compute-add-ons). Your hardware may not be suitable for the intended workload and may experience high Swap usage.
 
-Swap is a portion of your instance's disk that is reserved for the operating system to use when the available RAM has been utilised. As it uses the disk, Swap is slower to access and is generally used as a last resort.
+Swap is a portion of your instance's disk that is reserved for the operating system to use when the available RAM has been utilized. As it uses the disk, Swap is slower to access and is generally used as a last resort.
 
 Swap can be used even if your instance has plenty of RAM. If this is the case, do not worry.
 
@@ -41,7 +41,7 @@ You can check your Swap usage directly on the Supabase Platform. For this go to 
 
 It is also possible to monitor your resources and set up alerts using Prometheus/Grafana. You can find a guide for this [here](https://supabase.com/docs/guides/platform/metrics).
 
-An [example repository](https://github.com/supabase/supabase-grafana) to ingest metrics and visualise them with Grafana is provided in the linked guide, where we maintain a [list of the exported metrics](https://github.com/supabase/supabase-grafana/blob/main/docs/metrics.md).
+An [example repository](https://github.com/supabase/supabase-grafana) to ingest metrics and visualize them with Grafana is provided in the linked guide, where we maintain a [list of the exported metrics](https://github.com/supabase/supabase-grafana/blob/main/docs/metrics.md).
 
 Some useful metrics to monitor are:
 
