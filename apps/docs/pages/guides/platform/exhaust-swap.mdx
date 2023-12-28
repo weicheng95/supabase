@@ -43,10 +43,12 @@ It is also possible to monitor your resources and set up alerts using Prometheus
 
 An [example repository](https://github.com/supabase/supabase-grafana) to ingest metrics and visualize them with Grafana is provided in the linked guide, where we maintain a [list of the exported metrics](https://github.com/supabase/supabase-grafana/blob/main/docs/metrics.md).
 
-Some useful metrics to monitor are:
+Some useful metrics to monitor are (this is not an exhaustive list):
 
 - `node_memory_SwapFree_bytes` - Shows the total amount of Swap available in bytes.
 - `node_disk_io_time_seconds_total` and `node_disk_io_now` - Shows the amount of time spent on disk I/O, an increase in this **could** mean excessive swapping.
+- `node_memory_MemTotal_bytes` and `node_memory_MemFree_bytes` - Shows the total RAM and amount of available RAM on your instance
+- `node_vmstat_pswpin` and `node_vmstat_pswpout` - Shows the number of pages that have been swapped in or out (monitoring this for spikes means that your instance is swapping)
 
 ## Common reasons for high Swap usage
 
