@@ -1,50 +1,53 @@
+import type { AlternateLinkDescriptor } from 'next/dist/lib/metadata/types/alternative-urls-types'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+
+import { alternates, metadata } from '~/features/robots/metadata'
+import { favicons } from '~/features/ui/favicons/faviconData'
+
+const decamelize = (s: string) => {
+  let result = s
+  const matches = s.matchAll(/(?<=[a-z])([A-Z])/g)
+
+  for (const match of matches) {
+    result = result.replace(match[0], `-${match[1].toLowerCase()}`)
+  }
+
+  return result
+}
+
+const convertToString = (altDescriptor: string | URL | Array<AlternateLinkDescriptor>) => {
+  switch (true) {
+    case typeof altDescriptor === 'string':
+      return altDescriptor
+    case altDescriptor instanceof URL:
+      return altDescriptor.toString()
+    default:
+      /**
+       * [Charis] Should probably map through these but we don't use this so
+       * not going to bother for now
+       */
+      return altDescriptor[0].url instanceof URL
+        ? altDescriptor[0].url.toString()
+        : altDescriptor[0].url
+  }
+}
 
 const Favicons = () => {
-  const { basePath } = useRouter()
+  const alts = alternates.alternates?.types
+
   return (
     <Head>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="57x57" href={`${basePath}/favicon/apple-touch-icon-57x57.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="114x114" href={`${basePath}/favicon/apple-touch-icon-114x114.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href={`${basePath}/favicon/apple-touch-icon-72x72.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="144x144" href={`${basePath}/favicon/apple-touch-icon-144x144.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="60x60" href={`${basePath}/favicon/apple-touch-icon-60x60.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="120x120" href={`${basePath}/favicon/apple-touch-icon-120x120.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="76x76" href={`${basePath}/favicon/apple-touch-icon-76x76.png`}/>
-      {/* prettier-ignore */}
-      <link rel="apple-touch-icon-precomposed" sizes="152x152" href={`${basePath}/favicon/apple-touch-icon-152x152.png`}/>
-      {/* prettier-ignore */}
-      <link rel="icon" type="image/png" href={`${basePath}/favicon/favicon-196x196.png`} sizes="196x196"/>
-      {/* prettier-ignore */}
-      <link rel="icon" type="image/png" href={`${basePath}/favicon/favicon-96x96.png`} sizes="96x96"/>
-      {/* prettier-ignore */}
-      <link rel="icon" type="image/png" href={`${basePath}/favicon/favicon-32x32.png`} sizes="32x32"/>
-      {/* prettier-ignore */}
-      <link rel="icon" type="image/png" href={`${basePath}/favicon/favicon-16x16.png`} sizes="16x16"/>
-      {/* prettier-ignore */}
-      <link rel="icon" type="image/png" href={`${basePath}/favicon/favicon-128.png`} sizes="128x128"/>
-      <meta name="application-name" content="&nbsp;" />
-      <meta name="msapplication-TileColor" content="#1E1E1E" />
-      <meta name="msapplication-TileImage" content="mstile-144x144.png" />
-      <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
-      <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
-      <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
-      <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
-      <meta name="theme-color" content="#1E1E1E" />
-      <link rel="shortcut icon" href={`${basePath}/favicon/favicon.ico`} />
-      <link rel="icon" type="image/png" href={`${basePath}/favicon/favicon.ico`} />
-      {/* misc */}
-      <link rel="manifest" href={`${basePath}/favicon/site.webmanifest`} />
-      <meta name="msapplication-config" content={`${basePath}/favicon/browserconfig.xml`} />
-      <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
+      {favicons.map(({ url: href, rel, type, sizes }) => (
+        <link key={href} rel={rel} href={href} {...(type && { type })} {...(sizes && { sizes })} />
+      ))}
+      {Object.keys(metadata).map((key) => (
+        <meta key={key} name={decamelize(key)} content={metadata[key]} />
+      ))}
+      {!!alts &&
+        Object.keys(alts).map((key) => {
+          const url = alts[key]
+          return !!url ? <link rel="alternate" type={key} href={convertToString(url)} /> : null
+        })}
     </Head>
   )
 }

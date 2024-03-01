@@ -1,3 +1,5 @@
+'use client'
+
 import dynamic from 'next/dynamic'
 import { Toaster, ToastBar, toast } from 'react-hot-toast'
 import { Button, IconX } from 'ui'
@@ -40,8 +42,8 @@ const PortalToast = () => (
                       t.type === 'loading'
                         ? 'max-w-[380px]'
                         : isConsentToast
-                        ? 'max-w-none sm:max-w-[800px]'
-                        : 'max-w-[260px]'
+                          ? 'max-w-none sm:max-w-[800px]'
+                          : 'max-w-[260px]'
                     }`}
                   >
                     {message}
