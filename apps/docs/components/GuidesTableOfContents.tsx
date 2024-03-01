@@ -11,7 +11,7 @@ const formatSlug = (slug: string) => {
 
 const formatTOCHeader = (content: string) => {
   let begin = false
-  const res = []
+  const res: Array<string> = []
   for (const x of content) {
     if (x === '`') {
       if (!begin) {
@@ -28,7 +28,7 @@ const formatTOCHeader = (content: string) => {
   return res.join('')
 }
 
-interface TOCHeader {
+export interface TOCHeader {
   id: number
   level: number
   text: string

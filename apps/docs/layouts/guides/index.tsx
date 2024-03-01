@@ -39,8 +39,10 @@ const Layout: FC<Props> = (props) => {
   const pathname = usePathname()
   const [hash] = useHash()
 
-  const articleRef = useRef()
-  const [tocList, setTocList] = useState([])
+  const articleRef = useRef(null)
+  const [tocList, setTocList] = useState<
+    Array<{ id: number; text: string; link: string; level: number }>
+  >([])
 
   const { asPath } = useRouter()
   const router = useRouter()
@@ -56,17 +58,17 @@ const Layout: FC<Props> = (props) => {
   }, [hash, JSON.stringify(tocList)])
 
   useEffect(() => {
-    const articleEl = articleRef.current as HTMLElement
+    const articleEl = articleRef.current as unknown as HTMLElement
 
     if (!articleRef.current) return
     const headings = Array.from(articleEl.querySelectorAll('h2, h3'))
     const newHeadings = headings
       .filter((heading) => heading.id)
-      .map((heading) => {
-        const text = heading.textContent.replace('#', '')
-        const link = heading.querySelector('a').getAttribute('href')
+      .map((heading, id) => {
+        const text = heading.textContent?.replace('#', '') ?? ''
+        const link = heading.querySelector('a')?.getAttribute('href') || '#'
         const level = heading.tagName === 'H2' ? 2 : 3
-        return { text, link, level }
+        return { id, text, link, level }
       })
     setTocList(newHeadings)
   }, [pathname]) // Needed to recalculate the ToC when the page changes
@@ -97,6 +99,7 @@ const Layout: FC<Props> = (props) => {
         openGraph={{
           url: `https://supabase.com/docs${asPath}`,
           type: 'article',
+          // @ts-ignore
           videos: props.meta?.video && [
             {
               // youtube based video meta
